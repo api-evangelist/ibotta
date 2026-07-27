@@ -1,8 +1,18 @@
 aid: ibotta
-name: IBotta
-description: 'IBotta is a company surfaced as a portfolio company of ggv-capital and added to the API
-  Evangelist network as a stub for enrichment. Sector: consumer. This profile is a lead awaiting the enrichment
-  pipeline.'
+name: Ibotta
+description: >-
+  Ibotta is a Denver-based consumer technology company (NYSE: IBTA) that operates
+  a cash-back rewards platform and the Ibotta Performance Network (IPN), a digital
+  promotions and retail-media network. Consumers earn real cash back on everyday
+  purchases in-store and online through the Ibotta mobile app, browser extension,
+  and connected retailer loyalty accounts. For brands, agencies, and retailers,
+  the Ibotta Performance Network distributes digital rebates and promotions to more
+  than 200 million shoppers across Ibotta's owned properties and a network of
+  partner retailers and publishers (including Walmart, Dollar General, Family
+  Dollar, and others). Ibotta was surfaced in the API Evangelist network as a
+  portfolio company of GGV Capital. It does not currently publish a public,
+  self-serve developer API or OpenAPI specification; its integrations are managed
+  B2B partner onboarding into the Ibotta Performance Network.
 url: https://raw.githubusercontent.com/api-evangelist/ibotta/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,12 +20,32 @@ x-backed-by:
 - ggv-capital
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Consumer
+- Cash Back
+- Rewards
+- Retail Media
+- Coupons
+- Loyalty
+- Shopping
+- Advertising
+- Promotions
+image: https://images.ctfassets.net/zgieqvh3kubv/59XQvan2WhYzTi2PwaCGQV/454455352f937dde633bac1485ab3fdd/featured-ibotta.webp
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -25,3 +55,22 @@ maintainers:
 common:
 - type: Website
   url: https://home.ibotta.com/
+- type: Blog
+  url: https://home.ibotta.com/blog/
+- type: Support
+  url: https://help.ibotta.com/
+- type: GitHubOrganization
+  url: https://github.com/ibotta
+- type: PrivacyPolicy
+  url: https://legal.ibotta.com/
+- type: TermsOfService
+  url: https://legal.ibotta.com/
+- type: Partners
+  url: https://ipn.ibotta.com/
+- type: DomainSecurity
+  url: security/ibotta-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
