@@ -1,0 +1,65 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://ibotta.com/.well-known/ai-plugin.json + https://ibotta.com/bex-api/api-docs.json +
+  live probes of status/changelog hosts 2026-08-12
+versioning:
+  scheme: info-version-only
+  current_version: 1.0.0
+  notes: >-
+    info.version is 1.0.0. There is no version segment in the base path
+    (https://api.ibops.net/bex-api), no version header documented, and no published version
+    negotiation. A consumer cannot pin a version.
+changelog:
+  published: false
+  notes: >-
+    No API changelog or release notes located on any Ibotta host. home.ibotta.com/blog/ is a
+    consumer/company blog and ipn.ibotta.com/resource-hub is marketing content; neither is a
+    dated API changelog. No RSS/Atom feed served (home.ibotta.com/rss.xml 404).
+status_page:
+  published: false
+  probes:
+  - url: https://status.ibotta.com/
+    status: 0
+    note: Does not resolve.
+  - url: https://ibottastatus.com
+    status: 0
+    note: Does not resolve.
+  notes: No public status page for any Ibotta API surface. No StatusPage pointer emitted.
+deprecation:
+  policy_documented: false
+  sunset_header: false
+  notes: >-
+    No deprecation or sunset policy published; no RFC 8594 Sunset/Deprecation headers
+    documented. No Deprecation pointer emitted.
+  deprecated_operations: []
+sla:
+  documented: false
+observed_decay:
+- surface: ChatGPT plugin manifest
+  url: https://ibotta.com/.well-known/ai-plugin.json
+  status: 200
+  finding: >-
+    The manifest is still served and still resolves to a live OpenAPI, but it targets the OpenAI
+    ChatGPT plugin platform, which OpenAI retired in 2024 in favour of GPTs and later the Apps
+    SDK. The document is therefore an orphaned agent surface: published, valid, and pointed at a
+    consumer platform that no longer reads it. Its `description_for_model` still instructs a
+    model to render an affiliate download link with utm_source=ChatGPT and to solicit feedback
+    through a Google Form (https://forms.gle/PGdgkKYMei1rAwUo6).
+- surface: Ibotta Product API backend
+  url: https://api.ibops.net/bex-api/openai/search
+  status: 401
+  finding: >-
+    The backend is still up (root 200) and rejects anonymous calls with 401 rather than 404 or
+    410 — the surface has not been decommissioned, only closed.
+- surface: First-party open-source packages
+  finding: >-
+    Every published Ibotta package's newest release predates 2024 (latest: sopstool v1.2.1,
+    2023-05-18; atomic_cache 0.6.0, 2023-05-05; PyPI packages 2020–2021). See
+    packages/ibotta-packages.yml.
+ipn_partner_apis:
+  lifecycle_documented: false
+  notes: >-
+    The Ibotta Performance Network partner APIs are documented only inside
+    portal.ipn.ibotta.com (Auth0-gated). No public versioning, deprecation, SLA, or status
+    commitment is discoverable for them.

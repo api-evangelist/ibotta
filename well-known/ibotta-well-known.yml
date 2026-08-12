@@ -1,0 +1,172 @@
+generated: '2026-08-12'
+method: probed
+source: live probes of /.well-known/ across every Ibotta host named in apis.yml, the OpenAPI servers[] host, and the IPN partner portal
+summary: >-
+  Two Ibotta-controlled hosts serve real /.well-known documents. ibotta.com serves a legacy
+  ChatGPT plugin manifest (/.well-known/ai-plugin.json) that declares Ibotta's only public
+  machine-readable API contract. auth.dashboard.ibotta.com — the Auth0 tenant fronting the
+  IPN partner portal — serves RFC 8414 / OIDC discovery metadata anonymously. Every other
+  path 404s, and ibotta.com answers 200 with an SPA HTML shell for unknown /.well-known/*
+  paths, so only the ai-plugin.json hit on that host is a real document.
+soft_404_warning: >-
+  ibotta.com is a Nuxt SPA with a catch-all route: it returns HTTP 200 text/html (5,539 bytes)
+  for EVERY unmatched path, including /.well-known/security.txt, /llms.txt, /openapi.json and
+  /.well-known/agent-card.json. Those 200s are NOT documents and are recorded here as misses.
+hosts:
+- host: https://ibotta.com
+  note: Nuxt SPA; unmatched paths return an HTTP 200 HTML shell (soft 404).
+  documents:
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: application/json
+    file: ibotta-ai-plugin.json
+    real_document: true
+    note: >-
+      ChatGPT plugin manifest, schema_version v1, name_for_model "IbottaShopping". Declares
+      api.type openapi at https://ibotta.com/bex-api/api-docs.json, auth.type service_http /
+      bearer, contact bexsupport@ibotta.com, legal https://legal.ibotta.com/. This is the
+      pointer that led to Ibotta's only public OpenAPI.
+  - path: /.well-known/security.txt
+    status: 200
+    real_document: false
+    note: SPA HTML shell, not a security.txt.
+  - path: /.well-known/openid-configuration
+    status: 200
+    real_document: false
+    note: SPA HTML shell.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    real_document: false
+    note: SPA HTML shell.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    real_document: false
+    note: SPA HTML shell.
+  - path: /.well-known/api-catalog
+    status: 200
+    real_document: false
+    note: SPA HTML shell.
+  - path: /.well-known/agent-card.json
+    status: 200
+    real_document: false
+    note: SPA HTML shell — NOT an A2A agent card. No AgentCard pointer emitted.
+  - path: /.well-known/agent.json
+    status: 200
+    real_document: false
+    note: SPA HTML shell — NOT an A2A agent card.
+- host: https://auth.dashboard.ibotta.com
+  note: >-
+    Auth0 tenant fronting the IPN partner portal (dashboard.ibotta.com 301s to
+    portal.ipn.ibotta.com, which 307s into this tenant's universal login).
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: ibotta-dashboard-openid-configuration.json
+    real_document: true
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: ibotta-dashboard-oauth-authorization-server.json
+    real_document: true
+    note: Byte-identical to the OIDC discovery document (Auth0 serves one metadata body at both paths).
+  - path: /.well-known/jwks.json
+    status: 200
+    content_type: application/json
+    real_document: true
+    note: RSA signing keys; not stored in-repo (rotating key material).
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://home.ibotta.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://ipn.ibotta.com
+  note: HubSpot CMS site for the Ibotta Performance Network; all /.well-known/* 404.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://api.ibotta.com
+  note: Consumer app API edge; root 301s to https://ibotta.com/. All /.well-known/* 404.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://portal.ipn.ibotta.com
+  note: >-
+    IPN partner portal. Every path, including /.well-known/*, 307s to
+    /api/auth/login?returnTo=... (Auth0). Nothing anonymously readable.
+  documents:
+  - path: /.well-known/security.txt
+    status: 307
+  - path: /.well-known/openid-configuration
+    status: 307
+  - path: /.well-known/oauth-authorization-server
+    status: 307
+  - path: /.well-known/api-catalog
+    status: 307
+  - path: /.well-known/agent-card.json
+    status: 307
+security_txt:
+  served: false
+  note: >-
+    No RFC 9116 security.txt on any Ibotta host. Ibotta does run a coordinated disclosure
+    program — see security/ibotta-vulnerability-disclosure.yml — but does not advertise it
+    at /.well-known/security.txt. No SecurityTxt pointer emitted.
+agent_card:
+  served: false
+  note: >-
+    No A2A agent card. The 200s on ibotta.com/.well-known/agent-card.json and
+    /.well-known/agent.json are the SPA catch-all HTML shell, not JSON AgentCard objects.
+    No AgentCard pointer emitted.

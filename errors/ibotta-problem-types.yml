@@ -1,0 +1,51 @@
+generated: '2026-08-12'
+method: derived
+format: json-message-envelope
+source: >-
+  Derived from the 4xx responses declared in openapi/ibotta-product-api-openapi.yml
+  (OpenAPI 3.0.1, 1 operation), plus the 401 body observed live on an anonymous
+  POST https://api.ibops.net/bex-api/openai/search (2026-08-12).
+rfc9457: false
+envelope:
+  media_type: application/json
+  shape: '{ "message": string }'
+  note: >-
+    A single flat `message` string. No type/title/status/detail/instance members, no error code,
+    no correlation id — an agent has nothing machine-actionable to branch on beyond the HTTP
+    status. The 200 success envelope is `{ "products": [Product, ...] }`.
+problems:
+- status: 401
+  title: Unauthorized
+  media_type: application/json
+  meaning: >-
+    No valid service bearer token was supplied. Observed live: {"message":"Unauthorized"}.
+  remediation: >-
+    Supply the service bearer token as `Authorization: Bearer <token>`. Credentials are not
+    self-serve — there is no published key-issuance flow for this API.
+  declared_in_spec: false
+  observed_live: true
+  note: >-
+    Not declared in the published OpenAPI, which documents only 200 and 403. Added to the
+    refined spec in openapi/ and captured in the overlay.
+- status: 403
+  title: Plugin unavailable
+  media_type: application/json
+  meaning: >-
+    The published spec's own wording: "The plugin is not available. Tell the user it will be
+    back soon and to download the Ibotta app and browser extension in the meantime." This is a
+    service-availability kill-switch expressed as a 403 rather than a 503.
+  remediation: >-
+    Non-retryable at the caller's end; the surface has been turned off. Fall back to the Ibotta
+    app or browser extension. Note the description is written as an instruction to an LLM, not
+    as an API error contract.
+  declared_in_spec: true
+  observed_live: false
+undeclared:
+- 'No 400 / 422 declared, though the request body has required fields (queries, limit) and
+  constraints (queries minItems 1) that must produce a rejection.'
+- 'No 429 declared; no rate-limit error contract published.'
+- 'No 5xx declared.'
+gaps:
+- Error bodies carry no stable machine-readable error code or request/correlation id.
+- Media type is application/json, not application/problem+json (RFC 9457).
+- The 403 description is prompt text aimed at a model rather than a specification of the condition.

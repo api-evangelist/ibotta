@@ -1,0 +1,92 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://ibotta.com/.well-known/ai-plugin.json (auth block) +
+  https://auth.dashboard.ibotta.com/.well-known/openid-configuration +
+  openapi/ibotta-product-api-openapi.yml + live 401 observed on
+  POST https://api.ibops.net/bex-api/openai/search
+docs: https://ipn.ibotta.com/integrating-with-the-ipn
+summary:
+  types:
+  - http
+  - oauth2
+  - openIdConnect
+  api_key_in: []
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+  - deviceCode
+  - refreshToken
+  note: >-
+    Two distinct auth surfaces. (1) The public Ibotta Product API uses a service-level HTTP
+    bearer token. (2) The IPN partner portal is fronted by an Auth0 tenant that publishes full
+    OIDC/RFC 8414 discovery metadata anonymously. The IPN partner APIs themselves are documented
+    only inside that portal, so their authentication scheme is not publicly verifiable.
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  applies_to: Ibotta Product API (https://api.ibops.net/bex-api)
+  description: >-
+    Service-level bearer token. Ibotta's own plugin manifest declares
+    auth.type "service_http" with authorization_type "bearer" and
+    has_user_authentication false — i.e. a single shared service credential, not per-user auth.
+    Tokens are not self-serve; there is no published key-issuance flow. Verified live on
+    2026-08-12: an anonymous POST to /openai/search returns HTTP 401 with
+    {"message":"Unauthorized"}.
+  self_serve: false
+  sources:
+  - well-known/ibotta-ai-plugin.json
+  - openapi/ibotta-product-api-openapi.yml
+- name: ipnPortalOidc
+  type: openIdConnect
+  applies_to: Ibotta Performance Network partner portal (https://portal.ipn.ibotta.com/)
+  openid_connect_url: https://auth.dashboard.ibotta.com/.well-known/openid-configuration
+  description: >-
+    Auth0 tenant at auth.dashboard.ibotta.com. dashboard.ibotta.com 301s to
+    portal.ipn.ibotta.com, which 307s every unauthenticated request to
+    /api/auth/login?returnTo=... and on into the tenant's universal login. Discovery metadata,
+    including JWKS, is served anonymously; the portal contents are not.
+  issuer: https://auth.dashboard.ibotta.com/
+  endpoints:
+    authorization: https://auth.dashboard.ibotta.com/authorize
+    token: https://auth.dashboard.ibotta.com/oauth/token
+    userinfo: https://auth.dashboard.ibotta.com/userinfo
+    jwks: https://auth.dashboard.ibotta.com/.well-known/jwks.json
+    registration: https://auth.dashboard.ibotta.com/oidc/register
+    revocation: https://auth.dashboard.ibotta.com/oauth/revoke
+    device_authorization: https://auth.dashboard.ibotta.com/oauth/device/code
+    backchannel_authentication: https://auth.dashboard.ibotta.com/bc-authorize
+  grant_types:
+  - authorization_code
+  - client_credentials
+  - refresh_token
+  - password
+  - implicit
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  pkce:
+  - S256
+  - plain
+  token_endpoint_auth_methods:
+  - client_secret_basic
+  - client_secret_post
+  - private_key_jwt
+  - none
+  id_token_signing_algs:
+  - HS256
+  - RS256
+  - PS256
+  dpop_signing_algs:
+  - ES256
+  mfa: >-
+    Tenant exposes /mfa/challenge plus mfa-oob, mfa-otp and mfa-recovery-code grant types —
+    MFA is configurable for partner portal accounts.
+  see: scopes/ibotta-scopes.yml
+  sources:
+  - well-known/ibotta-dashboard-openid-configuration.json
+gaps:
+- The Ibotta Performance Network partner APIs (offer ingestion, redemption, anti-stacking) have
+  no public authentication documentation; the technical reference lives inside the gated portal.
+- No public key-issuance, key-rotation, or credential-scoping documentation for the Product API.

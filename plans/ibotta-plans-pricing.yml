@@ -1,0 +1,44 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://ipn.ibotta.com/ + https://ipn.ibotta.com/integrating-with-the-ipn +
+  https://ipn.ibotta.com/resource-hub/ipn-integration +
+  https://ipn.ibotta.com/publisher-solutions + full ipn.ibotta.com sitemap.xml review (2026-08-12)
+summary: >-
+  Ibotta publishes no API plans, tiers, quotas, or prices. There is no developer pricing page,
+  no self-serve signup, and no rate card. Access to the Ibotta Performance Network is a sales
+  conversation ending in a partner agreement; the only published commercial statement is that
+  IPN integration has "no up-front fees" and is performance-priced against redeemed offers.
+plan_count: 0
+self_serve: false
+free_tier: false
+trial: false
+billing_model: performance-based-partnership
+notes: >-
+  IPN marketing pages describe the commercial shape without numbers: no up-front fees, a
+  dedicated Solutions Architect, and outcome/performance pricing tied to campaign redemptions.
+  No CPM, CPA, revenue-share percentage, minimum spend, or API call price is published anywhere
+  on Ibotta's public properties. The Ibotta Product API
+  (openapi/ibotta-product-api-openapi.yml) has no pricing at all — it is an internal
+  browser-extension surface with no key-issuance flow.
+access_path:
+- step: Contact form
+  url: https://ipn.ibotta.com/contact-cpg
+  note: Brand/CPG inquiry form; no pricing shown before or after submission.
+- step: Sales qualification
+  note: Ibotta assigns a rep and a Solutions Architect; commercial terms are negotiated.
+- step: Partner portal access
+  url: https://portal.ipn.ibotta.com/
+  note: >-
+    Auth0-gated. Technical documentation, and any commercial detail, live behind this login.
+    Probed 2026-08-12 — every path 307s to /api/auth/login.
+probes:
+- url: https://ipn.ibotta.com/integrating-with-the-ipn
+  status: 200
+  finding: Describes a "turnkey API" and an expert-led integration; no pricing, no plans.
+- url: https://ipn.ibotta.com/resource-hub/ipn-integration
+  status: 200
+  finding: Step-by-step integration narrative; states technical detail is partner-restricted.
+- url: https://portal.ipn.ibotta.com/
+  status: 307
+  finding: Redirects to Auth0 login; nothing readable anonymously.

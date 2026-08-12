@@ -1,0 +1,68 @@
+generated: '2026-08-12'
+method: probed
+source: https://auth.dashboard.ibotta.com/.well-known/openid-configuration
+docs: null
+summary: >-
+  Ibotta's public Product API declares no OAuth 2.0 security scheme — it uses a single service
+  bearer token with no scopes. The only scope surface Ibotta publishes anonymously is the
+  scopes_supported list from the Auth0 tenant that fronts the IPN partner portal
+  (auth.dashboard.ibotta.com). These are stock OIDC identity scopes for portal sign-in, NOT
+  API authorization scopes for the Ibotta Performance Network partner APIs — those are not
+  publicly documented. Recorded here as measured, not as an API permission model.
+authorization_servers:
+- issuer: https://auth.dashboard.ibotta.com/
+  applies_to: Ibotta Performance Network partner portal (portal.ipn.ibotta.com)
+  discovery: https://auth.dashboard.ibotta.com/.well-known/openid-configuration
+  status: 200
+  scope_kind: oidc-identity
+  scopes:
+  - name: openid
+    description: Standard OIDC scope requesting an ID token.
+  - name: profile
+    description: Basic profile claims for the signed-in partner user.
+  - name: offline_access
+    description: Issues a refresh token for long-lived portal sessions.
+  - name: name
+    description: name claim.
+  - name: given_name
+    description: given_name claim.
+  - name: family_name
+    description: family_name claim.
+  - name: nickname
+    description: nickname claim.
+  - name: email
+    description: email claim.
+  - name: email_verified
+    description: email_verified claim.
+  - name: picture
+    description: picture claim.
+  - name: created_at
+    description: created_at claim (Auth0 extension).
+  - name: identities
+    description: Linked identity providers for the account (Auth0 extension).
+  - name: phone
+    description: phone_number claim.
+  - name: address
+    description: address claim.
+  claims_supported:
+  - aud
+  - auth_time
+  - created_at
+  - email
+  - email_verified
+  - exp
+  - family_name
+  - given_name
+  - iat
+  - identities
+  - iss
+  - name
+  - nickname
+  - phone_number
+  - picture
+  - sub
+api_scopes:
+  documented: false
+  note: >-
+    No API authorization scopes are published for either the Ibotta Product API (bearer token,
+    no scopes) or the IPN partner APIs (documentation is behind the partner portal login).

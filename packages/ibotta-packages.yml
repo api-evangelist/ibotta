@@ -1,0 +1,112 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://github.com/Ibotta (79 public repos) + registry metadata from
+  rubygems.org/api/v1/gems/<gem>.json, pypi.org/pypi/<pkg>/json and
+  proxy.golang.org/<module>/@latest, all fetched 2026-08-12.
+summary: >-
+  Ibotta publishes first-party open-source packages, but NONE of them is a client SDK for an
+  Ibotta API. They are internal engineering tools — a Rails cache gem, a UPC helper, a
+  geohash library, distributed scikit-learn tooling, a SOPS wrapper — released from Ibotta's
+  own GitHub org under their own names. There is no Ibotta API client library on npm, PyPI,
+  RubyGems, Maven Central, NuGet, crates.io, Packagist or pkg.go.dev.
+sdk_count: 0
+package_count: 6
+no_sdk_reason: >-
+  The one public Ibotta API (Product API) is a single bearer-gated operation with no published
+  key issuance, and the IPN partner APIs are documented only inside the gated partner portal.
+  Neither has a published client library. No SDKs pointer emitted.
+packages:
+- name: sopstool
+  registry: pkg.go.dev
+  module: github.com/Ibotta/sopstool
+  url: https://pkg.go.dev/github.com/Ibotta/sopstool
+  repo: https://github.com/Ibotta/sopstool
+  official: true
+  api_client: false
+  language: go
+  version: v1.2.1
+  published: '2023-05-18'
+  note: >-
+    SOPS multi-file wrapper CLI. The repo description itself states "project is EOL"; last
+    release 2023-05-18.
+- name: atomic_cache
+  registry: rubygems
+  url: https://rubygems.org/gems/atomic_cache
+  repo: https://github.com/ibotta/atomic_cache
+  official: true
+  api_client: false
+  language: ruby
+  version: 0.6.0
+  published: '2023-05-05'
+  note: Rails cache gem that prevents the thundering-herd problem.
+- name: mr-uplift
+  registry: pypi
+  url: https://pypi.org/project/mr-uplift/
+  repo: https://github.com/Ibotta/mr_uplift
+  official: true
+  api_client: false
+  language: python
+  version: 0.0.16
+  published: '2021-08-10'
+  note: >-
+    Multiple-response uplift / heterogeneous-treatment-effects modelling. Source repo is
+    archived on GitHub. Also resolvable as `mr_uplift` (same distribution).
+- name: pure-predict
+  registry: pypi
+  url: https://pypi.org/project/pure-predict/
+  repo: https://github.com/Ibotta/pure-predict
+  official: true
+  api_client: false
+  language: python
+  version: 0.0.4
+  published: '2020-05-25'
+  note: Machine-learning prediction in pure Python. Source repo is archived on GitHub.
+- name: sk-dist
+  registry: pypi
+  url: https://pypi.org/project/sk-dist/
+  repo: https://github.com/Ibotta/sk-dist
+  official: true
+  api_client: false
+  language: python
+  version: 0.1.9
+  published: '2020-05-14'
+  note: Distributed scikit-learn meta-estimators in PySpark. Source repo is archived on GitHub.
+- name: ibotta_geohash
+  registry: rubygems
+  url: https://rubygems.org/gems/ibotta_geohash
+  repo: https://github.com/Ibotta/ibotta_geohash
+  official: true
+  api_client: false
+  language: ruby
+  version: 0.2.1
+  published: '2016-07-07'
+  note: Pure-Ruby GeoHash library. Source repo is archived on GitHub.
+checked_not_published:
+- name: ruby_upc_tools
+  registry: rubygems
+  version: null
+  published: null
+  note: >-
+    Repo github.com/Ibotta/ruby_upc_tools is public and was pushed 2026-06-18, but
+    rubygems.org/api/v1/gems/ruby_upc_tools.json returns 404 — the gem is not published to
+    RubyGems. Checked, nothing to record.
+- name: '@ibotta/* (npm scope)'
+  registry: npm
+  version: null
+  published: null
+  note: >-
+    npm registry search for maintainer:ibotta returns total 0, and the @ibotta scope resolves
+    404. Ibotta publishes no npm packages. The JavaScript repos in the org (Magic-Grid, vue-i18n,
+    ember-*) are forks of third-party projects — magic-grid on npm is maintained by "oj"
+    (e-oj/Magic-Grid), not Ibotta.
+excluded_forks:
+- github.com/Ibotta/adzerk-api-specification — a fork of adzerk/adzerk-api-specification (Kevel's
+  OpenAPI). Ibotta is a consumer of Kevel's ad-serving API; this spec describes Kevel's product,
+  not Ibotta's, and is deliberately NOT captured in openapi/.
+- github.com/Ibotta/fakeredis, Alamofire, mockito, vue-i18n, dd-trace-py, MPAndroidChart and
+  ~40 other repos are forks of third-party libraries.
+decay_signal: >-
+  Every first-party package Ibotta ships has a newest release older than three years (most
+  recent: 2023-05-18). Ibotta's open-source output has effectively stopped; nothing in the
+  package layer has been refreshed alongside the API surface.

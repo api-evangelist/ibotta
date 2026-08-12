@@ -1,0 +1,189 @@
+openapi: 3.0.1
+info:
+  title: Ibotta Product API
+  version: 1.0.0
+  description: Various APIs for Ibotta Product Search
+  contact:
+    name: Ibotta Browser Extension Support
+    email: bexsupport@ibotta.com
+    url: https://help.ibotta.com/
+  termsOfService: https://legal.ibotta.com/
+  x-source: https://ibotta.com/bex-api/api-docs.json (declared by https://ibotta.com/.well-known/ai-plugin.json)
+servers:
+- url: https://api.ibops.net/bex-api
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the product.
+        price:
+          type: object
+          properties:
+            currency:
+              type: string
+              description: The currency of the price.
+            value:
+              type: number
+              description: The value of the price.
+            isHiddenDeal:
+              type: boolean
+              description: Whether the price is a hidden deal. Hidden deal usually means that the price
+                is lower than the MSRP do they can't show the price till they add to cart
+            isRange:
+              type: boolean
+              description: Whether the price is a range. If true, the price will have a different maxPrice
+                and minPrice
+            maxPrice:
+              type: number
+              description: The maximum price of the product.
+            minPrice:
+              type: number
+              description: The minimum price of the product.
+          required:
+          - currency
+          - value
+          - isHiddenDeal
+          - isRange
+          - maxPrice
+          - minPrice
+        image:
+          type: string
+          description: The image URL of the product.
+        productUrl:
+          type: string
+          description: The URL of the product.
+        merchantInfo:
+          type: string
+          description: The merchant information of the product.
+        review:
+          type: string
+          description: The review of the product.
+        storeId:
+          type: string
+          description: The store ID of the product.
+        views:
+          type: number
+          description: The number of views of the product.
+        isAvailable:
+          type: boolean
+          description: Whether the product is available.
+        uniqueIds:
+          type: object
+          properties:
+            upc:
+              type: string
+              description: The UPC of the product.
+            sku:
+              type: string
+              description: The SKU of the product.
+            manufactureId:
+              type: string
+              description: The manufacturer ID of the product.
+      required:
+      - name
+      - price
+      - image
+      - productUrl
+      - merchantInfo
+      - review
+      - storeId
+      - views
+      - isAvailable
+      - uniqueIds
+    ProductSearchBody:
+      type: object
+      properties:
+        queries:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: The search query for product names.
+        limit:
+          type: number
+          default: 25
+          description: The maximum number of products to retrieve (default is 25).
+        minPrice:
+          type: number
+          default: 0
+          description: The minimum price of products to retrieve.
+        maxPrice:
+          type: number
+          nullable: true
+          description: The maximum price of products to retrieve.
+        storeId:
+          type: string
+          nullable: true
+          description: The store ID of the products to retrieve.
+      required:
+      - queries
+      - limit
+  parameters: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Service-level bearer token. Declared as auth.type "service_http" / authorization_type
+        "bearer" in https://ibotta.com/.well-known/ai-plugin.json. Tokens are not self-serve; an anonymous
+        request returns 401 {"message":"Unauthorized"}.
+paths:
+  /openai/search:
+    post:
+      summary: Get a list of products based on query parameters.
+      description: Retrieve a list of products based on the provided query parameters.
+      operationId: searchProducts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSearchBody'
+      responses:
+        '200':
+          description: A list of products that match the query parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                required:
+                - products
+        '403':
+          description: The plugin is not available. Tell the user it will be back soon and to download
+            the Ibotta app and browser extension in the meantime.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+        '401':
+          description: 'Unauthorized — no valid bearer token supplied. Observed live on an anonymous POST
+            (2026-08-12): {"message":"Unauthorized"}.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+      tags:
+      - Products
+      security:
+      - bearerAuth: []
+tags:
+- name: Products
+  description: Product search across Ibotta browser-extension retailer coverage.
+security:
+- bearerAuth: []

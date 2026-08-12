@@ -1,0 +1,97 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  Derived from components.schemas in openapi/ibotta-product-api-openapi.yml
+  (OpenAPI 3.0.1, 2 schemas: Product, ProductSearchBody).
+summary: >-
+  A deliberately small graph. The published contract exposes one first-class entity (Product)
+  with two inline value objects (price, uniqueIds) and one request object (ProductSearchBody).
+  Store is not a modelled entity — it appears only as an opaque storeId string on Product and
+  as a filter on the search body — so retailer resolution is a documented dead end.
+entities:
+- name: Product
+  kind: resource
+  description: A retail product observed by Ibotta's browser-extension price coverage.
+  identifiers:
+  - field: uniqueIds.upc
+    type: string
+    description: UPC barcode. The strongest cross-retailer join key in the model.
+  - field: uniqueIds.sku
+    type: string
+    description: Retailer SKU. Only meaningful within a single storeId.
+  fields:
+  - {name: name, type: string, description: Product name.}
+  - {name: price, type: object, description: Price value object (see Price).}
+  - {name: image, type: string, format: url, description: Product image URL.}
+  - {name: productUrl, type: string, format: url, description: Product detail page URL at the retailer.}
+  - {name: merchantInfo, type: string, description: Merchant information, unstructured string.}
+  - {name: review, type: string, description: Review text, unstructured string.}
+  - {name: storeId, type: string, description: Opaque retailer identifier.}
+  - {name: views, type: number, description: View count for the product.}
+  - {name: isAvailable, type: boolean, description: Whether the product is currently available.}
+  - {name: uniqueIds, type: object, description: Identifier value object (upc, sku).}
+- name: Price
+  kind: value-object
+  embedded_in: Product.price
+  fields:
+  - {name: currency, type: string, required: true}
+  - {name: value, type: number, required: true}
+  - {name: isHiddenDeal, type: boolean, required: true, description: 'True when the displayed price is above the real price because the retailer only reveals it in-cart.'}
+  - {name: isRange, type: boolean, required: true, description: 'True when the product is priced as a band; minPrice and maxPrice then differ.'}
+  - {name: maxPrice, type: number, required: true}
+  - {name: minPrice, type: number, required: true}
+  note: >-
+    All six members are required, so `value` is always present even when isRange is true —
+    consumers must decide whether to trust value or the min/max pair.
+- name: ProductSearchBody
+  kind: request-object
+  used_by: [searchProducts]
+  fields:
+  - {name: queries, type: array<string>, required: true, min_items: 1}
+  - {name: limit, type: number, required: true, default: 25}
+  - {name: minPrice, type: number, default: 0}
+  - {name: maxPrice, type: number, nullable: true}
+  - {name: storeId, type: string, nullable: true}
+- name: SearchResult
+  kind: response-envelope
+  returned_by: searchProducts
+  fields:
+  - {name: products, type: array<Product>, required: true}
+relationships:
+- from: SearchResult
+  to: Product
+  cardinality: has_many
+  via: products
+  confidence: high
+  source: 'paths./openai/search.post.responses.200 schema'
+- from: Product
+  to: Price
+  cardinality: has_one
+  via: price
+  confidence: high
+  source: components.schemas.Product.properties.price
+- from: Product
+  to: Store
+  cardinality: belongs_to
+  via: storeId
+  confidence: medium
+  source: components.schemas.Product.properties.storeId
+  note: >-
+    Store is referenced but never defined. There is no store lookup operation and no store
+    schema; the plugin manifest's only guidance is to build a favicon URL from the id against a
+    third-party host (instok.org), which is not part of Ibotta's contract.
+- from: ProductSearchBody
+  to: Store
+  cardinality: belongs_to
+  via: storeId
+  cardinality_note: optional filter
+  confidence: medium
+  source: components.schemas.ProductSearchBody.properties.storeId
+id_prefixes:
+  documented: false
+  note: storeId format is not specified — no prefix grammar, no enumeration, no example.
+gaps:
+- Store/retailer is an unmodelled foreign key with no resolving operation.
+- merchantInfo and review are free-text strings with no declared structure.
+- No offer, rebate, redemption, or cash-back entity appears anywhere in the public contract —
+  Ibotta's core business objects are entirely inside the gated IPN partner APIs.

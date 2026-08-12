@@ -1,0 +1,85 @@
+generated: '2026-08-12'
+method: derived
+status: candidate
+source: >-
+  Derived from the operations in openapi/ibotta-product-api-openapi.yml. Ibotta publishes NO
+  MCP server — this is an API Evangelist candidate mapping, not a provider-published one.
+provider_published:
+  mcp_server: false
+  probes:
+  - url: https://api.ibops.net/bex-api/mcp
+    status: 404
+  - url: https://ibotta.com/mcp
+    status: 200
+    note: SPA HTML shell (soft 404), not an MCP endpoint.
+  - url: https://ipn.ibotta.com/mcp
+    status: 404
+  note: >-
+    No hosted or remote MCP server is advertised on any Ibotta host, in the GitHub org, or in
+    Ibotta's own agent-facing document (/.well-known/ai-plugin.json, which targets the retired
+    OpenAI ChatGPT plugin platform instead).
+existing_agent_surface:
+  kind: openai-plugin-manifest-v1
+  url: https://ibotta.com/.well-known/ai-plugin.json
+  note: >-
+    Ibotta's only shipped agent surface. It is the pre-MCP generation of the same idea: a
+    manifest with a model-facing description and a pointer to an OpenAPI. Migrating it to MCP
+    would be a small, mostly mechanical step — one tool, one schema.
+server:
+  url: null
+  transport: null
+  auth: >-
+    Any MCP server built over this API would inherit the Product API's service bearer token;
+    there is no per-user auth (has_user_authentication is false in the plugin manifest).
+tools:
+- name: search_products
+  status: candidate
+  rest: searchProducts
+  method: POST
+  path: /openai/search
+  description: >-
+    Search Ibotta's browser-extension product coverage by one or more keyword queries, with
+    optional price-range and single-store filters. Returns product name, price (with
+    hidden-deal and price-range flags), image, product URL, merchant info, store id, view
+    count, availability, and UPC/SKU.
+  input_schema_source: components.schemas.ProductSearchBody
+  input_schema:
+    type: object
+    required:
+    - queries
+    - limit
+    properties:
+      queries:
+        type: array
+        items:
+          type: string
+        minItems: 1
+        description: The search query for product names.
+      limit:
+        type: number
+        default: 25
+        description: The maximum number of products to retrieve (default is 25).
+      minPrice:
+        type: number
+        default: 0
+        description: The minimum price of products to retrieve.
+      maxPrice:
+        type: number
+        nullable: true
+        description: The maximum price of products to retrieve.
+      storeId:
+        type: string
+        nullable: true
+        description: The store ID of the products to retrieve.
+  output_schema_source: 'paths./openai/search.post.responses.200'
+  read_only: true
+coverage:
+  openapi_operations: 1
+  tools_derived: 1
+  operations_uncovered: 0
+tool_crosswalk:
+  emitted: false
+  reason: >-
+    A ToolCrosswalk binds provider-published MCP tools (or GraphQL fields) to backing OpenAPI
+    operations. Ibotta publishes neither an MCP server nor GraphQL, so there is nothing to
+    cross-walk — the candidate tool above is already a 1:1 derivation from the single operation.

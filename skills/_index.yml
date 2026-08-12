@@ -1,0 +1,31 @@
+generated: '2026-08-12'
+method: generated
+source: >-
+  Authored by API Evangelist from openapi/ibotta-product-api-openapi.yml and the derived
+  conventions/errors/authentication artifacts in this repo. Ibotta publishes no AGENTS.md and
+  no first-party agent skills; a probe of https://ibotta.com/AGENTS.md and
+  https://ibotta.com/llms.txt returned the SPA HTML shell (soft 404), and
+  https://home.ibotta.com/llms.txt returned 404.
+provider_published: false
+api: Ibotta Product API
+skills:
+- name: ibotta-product-search
+  file: ibotta-product-search.md
+  description: >-
+    Search Ibotta's browser-extension product coverage by keyword, price range and store, and
+    read the returned price signals (hidden deals, price ranges, availability) correctly.
+  operations:
+  - searchProducts
+  covers:
+  - authentication (service bearer, not self-serve)
+  - error handling (401 / 403, flat message envelope, no RFC 9457)
+  - price semantics (isHiddenDeal, isRange, currency)
+  - identifier semantics (upc vs sku, opaque storeId)
+  - the absence of pagination
+coverage:
+  openapi_operations: 1
+  operations_covered: 1
+note: >-
+  One skill covers the entire public API surface, because the entire public API surface is one
+  operation. Ibotta's substantive flows — offer ingestion, redemption, anti-stacking — live in
+  the IPN partner APIs, which have no public contract to ground a skill in.

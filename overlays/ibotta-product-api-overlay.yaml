@@ -1,0 +1,79 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Ibotta Product API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-12'
+  method: generated
+  source: >-
+    Enhancements API Evangelist applied on top of the verbatim harvest at
+    openapi/_original/ibotta-product-api-openapi.json (fetched from
+    https://ibotta.com/bex-api/api-docs.json). Every action below is either an observed fact
+    (the live 401) or metadata sourced from Ibotta's own published documents
+    (https://ibotta.com/.well-known/ai-plugin.json). Nothing is invented.
+  extends: openapi/_original/ibotta-product-api-openapi.json
+  applied_to: openapi/ibotta-product-api-openapi.yml
+extends: openapi/_original/ibotta-product-api-openapi.json
+actions:
+- target: $.info
+  description: >-
+    Add contact and terms of service from Ibotta's published plugin manifest
+    (contact_email bexsupport@ibotta.com, legal_info_url https://legal.ibotta.com/).
+  update:
+    contact:
+      name: Ibotta Browser Extension Support
+      email: bexsupport@ibotta.com
+      url: https://help.ibotta.com/
+    termsOfService: https://legal.ibotta.com/
+    x-source: >-
+      https://ibotta.com/bex-api/api-docs.json (declared by
+      https://ibotta.com/.well-known/ai-plugin.json)
+- target: $
+  description: >-
+    Declare the bearer security scheme the published spec omits. Ibotta's plugin manifest
+    declares auth.type "service_http" with authorization_type "bearer"; the spec itself carried
+    no components.securitySchemes and no security requirement.
+  update:
+    security:
+    - bearerAuth: []
+    components:
+      securitySchemes:
+        bearerAuth:
+          type: http
+          scheme: bearer
+          description: >-
+            Service-level bearer token. Declared as auth.type "service_http" /
+            authorization_type "bearer" in https://ibotta.com/.well-known/ai-plugin.json.
+            Tokens are not self-serve; an anonymous request returns 401
+            {"message":"Unauthorized"}.
+- target: $
+  description: Declare a tag so the single operation is classifiable.
+  update:
+    tags:
+    - name: Products
+      description: Product search across Ibotta browser-extension retailer coverage.
+- target: $.paths['/openai/search'].post
+  description: Tag the operation and bind it to the bearer scheme.
+  update:
+    tags:
+    - Products
+    security:
+    - bearerAuth: []
+- target: $.paths['/openai/search'].post.responses
+  description: >-
+    Add the 401 response observed live on 2026-08-12 but absent from the published spec, which
+    documented only 200 and 403.
+  update:
+    '401':
+      description: >-
+        Unauthorized — no valid bearer token supplied. Observed live on an anonymous POST
+        (2026-08-12): {"message":"Unauthorized"}.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+            - message

@@ -1,0 +1,39 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  openapi/ibotta-product-api-openapi.yml + https://ibotta.com/.well-known/ai-plugin.json +
+  IPN documentation review + live response-header inspection of
+  https://api.ibops.net/bex-api/openai/search (2026-08-12)
+summary: >-
+  Ibotta publishes no rate limits for any API surface, and none can be observed anonymously.
+  The Product API rejects unauthenticated calls with 401 before any limiting is signalled, and
+  the IPN partner API documentation is behind the portal login.
+limit_count: 0
+limits: []
+response_headers:
+  documented: []
+  observed: []
+  note: >-
+    No RateLimit-* (RFC 9331 draft) and no X-RateLimit-* headers were present on the observed
+    401 response. Retry-After was not returned.
+exhaustion_status:
+  documented: null
+  note: >-
+    No 429 response is declared in the published OpenAPI. The only 4xx in the spec is 403
+    ("The plugin is not available…"), which is a service kill-switch rather than a rate limit.
+probes:
+- url: https://api.ibops.net/bex-api/openai/search
+  method: POST
+  status: 401
+  finding: '{"message":"Unauthorized"} with no rate-limit headers.'
+- url: https://api.ibops.net/bex-api
+  method: GET
+  status: 200
+  finding: Root responds; no rate-limit headers advertised.
+- url: https://ipn.ibotta.com/integrating-with-the-ipn
+  status: 200
+  finding: No published limits, quotas, or throttling policy.
+recommendation: >-
+  Publish per-key limits and emit RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset plus
+  Retry-After on 429. An agent integrating against this API today has no runtime signal at all
+  and can only discover limits by hitting them.

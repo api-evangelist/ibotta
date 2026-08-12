@@ -1,0 +1,89 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  openapi/ibotta-product-api-openapi.yml + well-known/ibotta-ai-plugin.json +
+  live probe of https://api.ibops.net/bex-api/openai/search (2026-08-12)
+summary: >-
+  Cross-cutting semantics for the Ibotta Product API. The surface is one POST search operation,
+  so most conventions are simply absent rather than idiosyncratic. Nothing here is inferred:
+  where a convention is undocumented it is recorded as undocumented, not guessed.
+authentication:
+  styles:
+  - http_bearer
+  header: Authorization
+  self_serve: false
+  see: authentication/ibotta-authentication.yml
+base_url: https://api.ibops.net/bex-api
+transport:
+  protocol: https
+  request_media_type: application/json
+  response_media_type: application/json
+  method_semantics: >-
+    Search is a POST with a JSON body rather than a GET with query parameters — a read
+    expressed as a write. Callers must not assume the response is cacheable by HTTP semantics.
+idempotency:
+  documented: false
+  supported: false
+  notes: >-
+    No Idempotency-Key header or equivalent is documented. The one published operation is a
+    non-mutating search, so replay is harmless, but there is no idempotency contract to rely on
+    for any future write operation. No Idempotency pointer emitted.
+pagination:
+  documented: false
+  style: none
+  parameters:
+  - name: limit
+    in: body
+    type: number
+    default: 25
+    description: Maximum number of products to return. This is a cap, not a page size.
+  response_fields: []
+  notes: >-
+    No offset, cursor, page, or nextToken parameter and no pagination metadata in the response
+    envelope. Results beyond `limit` are unreachable.
+filtering:
+  parameters:
+  - name: queries
+    type: array<string>
+    required: true
+    min_items: 1
+    description: One or more product-name search queries.
+  - name: minPrice
+    type: number
+    default: 0
+  - name: maxPrice
+    type: number
+    nullable: true
+  - name: storeId
+    type: string
+    nullable: true
+    description: Restricts results to a single retailer.
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: false
+request_id_tracing:
+  documented: false
+  notes: No request-id / correlation-id header documented, and error bodies carry none.
+versioning:
+  documented: false
+  notes: info.version 1.0.0 only; no version in path or header. See lifecycle/ibotta-lifecycle.yml.
+error_envelope:
+  media_type: application/json
+  shape: '{ "message": string }'
+  rfc9457: false
+  see: errors/ibotta-problem-types.yml
+rate_limit_signalling:
+  documented: false
+  headers: []
+  see: rate-limits/ibotta-rate-limits.yml
+webhooks:
+  documented: false
+cross_links:
+  authentication: authentication/ibotta-authentication.yml
+  errors: errors/ibotta-problem-types.yml
+  lifecycle: lifecycle/ibotta-lifecycle.yml
+  rate_limits: rate-limits/ibotta-rate-limits.yml
+  data_model: data-model/ibotta-data-model.yml

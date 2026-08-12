@@ -10,30 +10,39 @@ description: >-
   than 200 million shoppers across Ibotta's owned properties and a network of
   partner retailers and publishers (including Walmart, Dollar General, Family
   Dollar, and others). Ibotta was surfaced in the API Evangelist network as a
-  portfolio company of GGV Capital. It does not currently publish a public,
-  self-serve developer API or OpenAPI specification; its integrations are managed
-  B2B partner onboarding into the Ibotta Performance Network.
+  portfolio company of GGV Capital. Ibotta publishes exactly one machine-readable
+  API contract: the Ibotta Product API (an OpenAPI 3.0.1 document at
+  ibotta.com/bex-api/api-docs.json), declared by the ChatGPT plugin manifest Ibotta
+  still serves at ibotta.com/.well-known/ai-plugin.json — a single product-search
+  operation backing the Ibotta browser extension, gated by a service bearer token
+  that is not self-serve. The Ibotta Performance Network APIs that partners actually
+  integrate against are documented only inside the IPN partner portal
+  (portal.ipn.ibotta.com), which is behind Auth0 and reached through a sales
+  conversation; no public IPN API reference, pricing, or rate-limit documentation
+  exists.
 url: https://raw.githubusercontent.com/api-evangelist/ibotta/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - ggv-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: public-openapi-found
 accessModel:
   pricing: unknown
-  onboarding: unknown
+  onboarding: sales-gate
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
+  label: Partner / sales gated
+  confidence: medium
+  source:
+  - authentication
+  - plans
+  generated: '2026-08-12'
   method: derived
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-12'
 tags:
 - Company
 - Consumer
@@ -45,8 +54,48 @@ tags:
 - Shopping
 - Advertising
 - Promotions
+- Product Search
+- Retail
+- Affiliate
+- CPG
 image: https://images.ctfassets.net/zgieqvh3kubv/59XQvan2WhYzTi2PwaCGQV/454455352f937dde633bac1485ab3fdd/featured-ibotta.webp
-apis: []
+apis:
+- name: Ibotta Product API
+  description: >-
+    Single-operation product search API behind the Ibotta browser extension. POST
+    /openai/search accepts an array of keyword queries plus limit / minPrice /
+    maxPrice / storeId filters and returns products with name, price (including
+    hidden-deal and price-range flags), image, product URL, merchant info, store id,
+    view count, availability and unique identifiers (UPC/SKU). Published as OpenAPI
+    3.0.1 at https://ibotta.com/bex-api/api-docs.json and declared by Ibotta's own
+    ChatGPT plugin manifest. Served from api.ibops.net — Ibotta's operations domain —
+    and authenticated with a service bearer token; an anonymous call returns HTTP 401
+    {"message":"Unauthorized"}.
+  humanURL: https://ibotta.com/browser-extension
+  baseURL: https://api.ibops.net/bex-api
+  tags:
+  - Product Search
+  - Shopping
+  - Retail
+  - Cash Back
+  - Coupons
+  properties:
+  - type: OpenAPI
+    url: openapi/ibotta-product-api-openapi.yml
+  - type: Authentication
+    url: authentication/ibotta-authentication.yml
+  - type: ErrorCatalog
+    url: errors/ibotta-problem-types.yml
+  - type: DataModel
+    url: data-model/ibotta-data-model.yml
+  - type: Overlay
+    url: overlays/ibotta-product-api-overlay.yaml
+  - type: MCPServer
+    url: mcp/ibotta-mcp.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: RateLimits
+    url: rate-limits/ibotta-rate-limits.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -60,17 +109,43 @@ common:
 - type: Support
   url: https://help.ibotta.com/
 - type: GitHubOrganization
-  url: https://github.com/ibotta
+  url: https://github.com/Ibotta
 - type: PrivacyPolicy
   url: https://legal.ibotta.com/
 - type: TermsOfService
   url: https://legal.ibotta.com/
 - type: Partners
   url: https://ipn.ibotta.com/
+- type: Documentation
+  url: https://ipn.ibotta.com/integrating-with-the-ipn
+- type: GettingStarted
+  url: https://ipn.ibotta.com/resource-hub/ipn-integration
+- type: Login
+  url: https://portal.ipn.ibotta.com/
 - type: DomainSecurity
   url: security/ibotta-domain-security.yml
+- type: WellKnown
+  url: well-known/ibotta-well-known.yml
+- type: Security
+  url: security/ibotta-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/ibotta-vulnerability-disclosure.yml
+- type: Conformance
+  url: conformance/ibotta-conformance.yml
+- type: Conventions
+  url: conventions/ibotta-conventions.yml
+- type: Lifecycle
+  url: lifecycle/ibotta-lifecycle.yml
+- type: OAuthScopes
+  url: scopes/ibotta-scopes.yml
+- type: Packages
+  url: packages/ibotta-packages.yml
+- type: Plans
+  url: plans/ibotta-plans-pricing.yml
+- type: LLMsTxt
+  url: llms/ibotta-llms.txt
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-12'
+  status: enriched
+  artifacts_added: 17
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
