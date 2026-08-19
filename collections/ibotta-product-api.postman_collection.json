@@ -1,0 +1,254 @@
+{
+  "item": [
+    {
+      "id": "81aa1f1e-2493-4e0b-ba3c-e243667129c1",
+      "name": "Products",
+      "description": {
+        "content": "Product search across Ibotta browser-extension retailer coverage.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4335af8b-bafa-4744-b2fd-629f2d25062f",
+          "name": "Get a list of products based on query parameters.",
+          "request": {
+            "name": "Get a list of products based on query parameters.",
+            "description": {
+              "content": "Retrieve a list of products based on the provided query parameters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "openai",
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"queries\": [\n    \"<string>\"\n  ],\n  \"limit\": 25,\n  \"minPrice\": 0,\n  \"maxPrice\": \"<number>\",\n  \"storeId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b1e7211-fad1-4445-b0ab-9338af31320b",
+              "name": "A list of products that match the query parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "openai",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"queries\": [\n    \"<string>\"\n  ],\n  \"limit\": 25,\n  \"minPrice\": 0,\n  \"maxPrice\": \"<number>\",\n  \"storeId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"products\": [\n    {\n      \"name\": \"string\",\n      \"price\": {\n        \"currency\": \"string\",\n        \"value\": 2784.817625461524,\n        \"isHiddenDeal\": false,\n        \"isRange\": true,\n        \"maxPrice\": 9458.798175565016,\n        \"minPrice\": 6226.577904045527\n      },\n      \"image\": \"string\",\n      \"productUrl\": \"string\",\n      \"merchantInfo\": \"string\",\n      \"review\": \"string\",\n      \"storeId\": \"string\",\n      \"views\": 96.22196313433862,\n      \"isAvailable\": true,\n      \"uniqueIds\": {\n        \"upc\": \"string\",\n        \"sku\": \"string\",\n        \"manufactureId\": \"string\"\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"price\": {\n        \"currency\": \"string\",\n        \"value\": 7750.683923412056,\n        \"isHiddenDeal\": false,\n        \"isRange\": true,\n        \"maxPrice\": 8121.9315610751,\n        \"minPrice\": 6216.025182568004\n      },\n      \"image\": \"string\",\n      \"productUrl\": \"string\",\n      \"merchantInfo\": \"string\",\n      \"review\": \"string\",\n      \"storeId\": \"string\",\n      \"views\": 588.7443264292302,\n      \"isAvailable\": true,\n      \"uniqueIds\": {\n        \"upc\": \"string\",\n        \"sku\": \"string\",\n        \"manufactureId\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "745b102a-8d40-4510-a5c6-947dfc09fc76",
+              "name": "Unauthorized — no valid bearer token supplied. Observed live on an anonymous POST (2026-08-12): {\"message\":\"Unauthorized\"}.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "openai",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"queries\": [\n    \"<string>\"\n  ],\n  \"limit\": 25,\n  \"minPrice\": 0,\n  \"maxPrice\": \"<number>\",\n  \"storeId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31c1a0df-d52e-48c4-8068-ccdeb75de2ad",
+              "name": "The plugin is not available. Tell the user it will be back soon and to download the Ibotta app and browser extension in the meantime.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "openai",
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"queries\": [\n    \"<string>\"\n  ],\n  \"limit\": 25,\n  \"minPrice\": 0,\n  \"maxPrice\": \"<number>\",\n  \"storeId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.ibops.net/bex-api",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7f797c16-b854-46c6-9e72-156013f6627b",
+    "name": "Ibotta Product API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Various APIs for Ibotta Product Search\n\nContact Support:\n Name: Ibotta Browser Extension Support\n Email: bexsupport@ibotta.com",
+      "type": "text/plain"
+    }
+  }
+}
