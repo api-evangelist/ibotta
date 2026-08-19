@@ -40,7 +40,7 @@ accessModel:
   - plans
   generated: '2026-08-12'
   method: derived
-specificationVersion: '0.21'
+specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-08-12'
 tags:
