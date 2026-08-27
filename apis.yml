@@ -75,46 +75,22 @@ tags_raw:
 - CPG
 image: https://images.ctfassets.net/zgieqvh3kubv/59XQvan2WhYzTi2PwaCGQV/454455352f937dde633bac1485ab3fdd/featured-ibotta.webp
 apis:
-- name: Ibotta Product API
-  description: >-
-    Single-operation product search API behind the Ibotta browser extension. POST
-    /openai/search accepts an array of keyword queries plus limit / minPrice /
-    maxPrice / storeId filters and returns products with name, price (including
-    hidden-deal and price-range flags), image, product URL, merchant info, store id,
-    view count, availability and unique identifiers (UPC/SKU). Published as OpenAPI
-    3.0.1 at https://ibotta.com/bex-api/api-docs.json and declared by Ibotta's own
-    ChatGPT plugin manifest. Served from api.ibops.net — Ibotta's operations domain —
-    and authenticated with a service bearer token; an anonymous call returns HTTP 401
-    {"message":"Unauthorized"}.
+- aid: ibotta:ibotta-products-api
+  name: Ibotta Products API
+  description: Product search across Ibotta browser-extension retailer coverage.
   humanURL: https://ibotta.com/browser-extension
   baseURL: https://api.ibops.net/bex-api
   tags:
-  - Product Search
-  - Shopping
-  - Retail
-  - Cashback
-  - Coupons
-  tags_raw:
-  - Product Search
-  - Shopping
-  - Retail
-  - Cash Back
-  - Coupons
+  - Products
   properties:
   - type: OpenAPI
-    url: openapi/ibotta-product-api-openapi.yml
+    url: openapi/ibotta-products-api-openapi.yml
   - type: Authentication
     url: authentication/ibotta-authentication.yml
   - type: ErrorCatalog
     url: errors/ibotta-problem-types.yml
   - type: DataModel
     url: data-model/ibotta-data-model.yml
-  - type: Overlay
-    url: overlays/ibotta-product-api-overlay.yaml
-  - type: MCPServer
-    url: mcp/ibotta-mcp.yml
-  - type: AgentSkill
-    url: skills/_index.yml
   - type: RateLimits
     url: rate-limits/ibotta-rate-limits.yml
 maintainers:
@@ -123,6 +99,12 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/ibotta-product-api-overlay.yaml
+- type: MCPServer
+  url: mcp/ibotta-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
 - type: Website
   url: https://home.ibotta.com/
 - type: Blog
