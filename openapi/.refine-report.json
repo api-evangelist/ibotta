@@ -1,0 +1,24 @@
+{
+  "provider": "ibotta",
+  "sources": [
+    "_original/ibotta-product-api-openapi.json"
+  ],
+  "outputs": [
+    "ibotta-openai-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "ibotta-product-api-openapi.json: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "ibotta-product-api-openapi.json: tagged paths POST /openai/search -> Openai",
+    "ibotta-product-api-openapi.json: declared missing tag: Openai",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/ibotta-product-api-openapi.yml: archived document superseded by a larger archived document",
+    "ibotta-openai-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
