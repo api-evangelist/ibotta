@@ -47,6 +47,36 @@ paths:
       - Openai
 components:
   schemas:
+    ProductSearchBody:
+      type: object
+      properties:
+        queries:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: The search query for product names.
+        limit:
+          type: number
+          default: 25
+          description: The maximum number of products to retrieve (default is 25).
+        minPrice:
+          type: number
+          default: 0
+          description: The minimum price of products to retrieve.
+        maxPrice:
+          type:
+          - number
+          - 'null'
+          description: The maximum price of products to retrieve.
+        storeId:
+          type:
+          - string
+          - 'null'
+          description: The store ID of the products to retrieve.
+      required:
+      - queries
+      - limit
     Product:
       type: object
       properties:
@@ -125,33 +155,3 @@ components:
       - views
       - isAvailable
       - uniqueIds
-    ProductSearchBody:
-      type: object
-      properties:
-        queries:
-          type: array
-          items:
-            type: string
-          minItems: 1
-          description: The search query for product names.
-        limit:
-          type: number
-          default: 25
-          description: The maximum number of products to retrieve (default is 25).
-        minPrice:
-          type: number
-          default: 0
-          description: The minimum price of products to retrieve.
-        maxPrice:
-          type:
-          - number
-          - 'null'
-          description: The maximum price of products to retrieve.
-        storeId:
-          type:
-          - string
-          - 'null'
-          description: The store ID of the products to retrieve.
-      required:
-      - queries
-      - limit
