@@ -113,6 +113,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: RateLimits
+  url: rate-limits/ibotta-rate-limits.yml
 - type: Overlay
   url: overlays/ibotta-product-api-overlay.yaml
 - type: X-MCPServerCandidate
