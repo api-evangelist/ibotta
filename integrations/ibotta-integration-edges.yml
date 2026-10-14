@@ -1,0 +1,25 @@
+generated: '2026-10-14'
+edges:
+- partner_name: mParticle
+  partner: mparticle
+  partner_match: aggregator
+  marketplace: coverage
+  channel: partner-built
+  direction: partner-built
+  type: coverage
+  relationship: connector-coverage
+  evidence: https://docs.mparticle.com/integrations/ibotta/event/
+  coverage_role:
+  - destination
+  cdp_signals:
+    destination:
+      catalog_entries:
+      - ibotta
+      integration_types:
+      - event
+  detected_by: sweep-cdp.py
+  first_seen: '2026-10-14'
+method: searched
+checked:
+- https://docs.mparticle.com/integrations/ibotta/event/
+source: https://docs.mparticle.com/integrations/ibotta/event/
