@@ -15,3 +15,52 @@
   relationship: connector-coverage
   status: not-a-workflow
   arazzo: null
+- slug: ibotta-pypi
+  label: PyPI
+  partner: pypi
+  partner_name: PyPI
+  category: official SDK (Python)
+  type: register
+  channel: package-registry
+  evidence: https://pypi.org/project/mr-uplift/
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: PyPI (public registry JSON)
+    spec_file: null
+    language: Python
+    packages:
+    - name: mr-uplift
+      version: 0.0.16
+      released: '2021-08-10'
+      released_field: upload_time
+      lapsed: true
+      page: https://pypi.org/project/mr-uplift/
+      repo_leg: github-org:ibotta
+      publisher_leg: email:ibotta.com
+      matched_by: domain
+    - name: pure-predict
+      version: 0.0.4
+      released: '2020-05-25'
+      released_field: upload_time
+      lapsed: true
+      page: https://pypi.org/project/pure-predict/
+      repo_leg: github-org:ibotta
+      publisher_leg: email:ibotta.com
+      matched_by: domain
+    - name: sk-dist
+      version: 0.1.9
+      released: '2020-05-14'
+      released_field: upload_time
+      lapsed: true
+      page: https://pypi.org/project/sk-dist/
+      repo_leg: github-org:ibotta
+      publisher_leg: email:ibotta.com
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
